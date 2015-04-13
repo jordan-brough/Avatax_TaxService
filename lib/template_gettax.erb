@@ -1,0 +1,95 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://avatax.avalara.com/services">
+   <soapenv:Header>
+      <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+         <wsse:UsernameToken wsu:Id="UsernameToken-7" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+            <wsse:Username><%= @username %></wsse:Username>
+            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText"><%= @password %></wsse:Password>
+            <wsu:Created>2012-03-02T23:41:44.511Z</wsu:Created>
+         </wsse:UsernameToken>
+      </wsse:Security>
+      <ser:Profile>
+         <ser:Name><%= @name %></ser:Name>
+         <ser:Client><%= @clientname %></ser:Client>
+         <ser:Adapter><%= @adapter %></ser:Adapter>
+         <ser:Machine><%= @machine %></ser:Machine>
+      </ser:Profile>
+   </soapenv:Header>
+      <soapenv:Body>
+        <ser:GetTax>
+         <ser:GetTaxRequest>
+           <ser:CompanyCode><%= @companycode %></ser:CompanyCode>
+           <ser:DocType><%= @doctype %></ser:DocType>
+           <ser:DocCode><%= @doccode %></ser:DocCode>
+           <ser:DocDate><%= @docdate %></ser:DocDate>
+           <ser:SalespersonCode><%= @salespersoncode %></ser:SalespersonCode>
+           <ser:CustomerCode><%= @customercode %></ser:CustomerCode>
+           <ser:CustomerUsageType><%= @customerusagetype %></ser:CustomerUsageType>
+           <ser:Discount><%= @discount %></ser:Discount>
+           <ser:PurchaseOrderNo><%= @purchaseorderno %></ser:PurchaseOrderNo>
+           <ser:ExemptionNo><%= @exemptionno %></ser:ExemptionNo>
+           <ser:OriginCode><%= @origincode %></ser:OriginCode>
+           <ser:DestinationCode><%= @destinationcode %></ser:DestinationCode>
+           <ser:Addresses><% @addresses.each do |addr| %>
+           <ser:BaseAddress>
+             <ser:AddressCode><%= addr[:addresscode] %></ser:AddressCode>
+             <ser:Line1><%= addr[:line1] %></ser:Line1>
+             <ser:Line2><%= addr[:line2] %></ser:Line2>
+             <ser:Line3><%= addr[:line3] %></ser:Line3>
+             <ser:City><%= addr[:city] %></ser:City>
+             <ser:Region><%= addr[:region] %></ser:Region>
+             <ser:PostalCode><%= addr[:postalcode] %></ser:PostalCode>
+             <ser:Country><%= addr[:country] %></ser:Country>
+             <ser:TaxRegionId><%= addr[:taxregionid] %></ser:TaxRegionId>
+             <ser:Latitude><%= addr[:latitude] %></ser:Latitude>
+             <ser:Longitude><%= addr[:longitude] %></ser:Longitude>
+           </ser:BaseAddress><% end %>   
+           </ser:Addresses>
+           <ser:Lines><% @lines.each do |lin| %>
+           <ser:Line>
+             <ser:No><%= lin[:no] %></ser:No>
+             <ser:OriginCode><%= lin[:origincodeline] %></ser:OriginCode>
+             <ser:DestinationCode><%= lin[:destinationcodeline] %></ser:DestinationCode>
+             <ser:ItemCode><%= lin[:itemcode] %></ser:ItemCode>
+             <ser:TaxCode><%= lin[:taxcode] %></ser:TaxCode>
+             <ser:Qty><%= lin[:qty] %></ser:Qty>
+             <ser:Amount><%= lin[:amount] %></ser:Amount>
+             <ser:Discounted><%= lin[:discounted] %></ser:Discounted>
+             <ser:RevAcct><%= lin[:revacct] %></ser:RevAcct>
+             <ser:Ref1><%= lin[:ref1] %></ser:Ref1>                  
+             <ser:Ref2><%= lin[:ref2] %></ser:Ref2>
+             <ser:ExemptionNo><%= lin[:exemptionno] %></ser:ExemptionNo>
+             <ser:CustomerUsageType><%= lin[:customerusagetype] %></ser:CustomerUsageType>
+             <ser:Description><%= lin[:description] %></ser:Description>
+             <ser:TaxOverride>
+               <ser:TaxOverrideType><%= lin[:taxoverridetypeline] %></ser:TaxOverrideType>
+               <ser:TaxAmount><%= lin[:taxamountline] %></ser:TaxAmount>
+               <ser:TaxDate><%= lin[:taxdateline] %></ser:TaxDate>
+               <ser:Reason><%= lin[:reasonline] %></ser:Reason>
+             </ser:TaxOverride>
+             <ser:TaxIncluded><%= lin[:taxincluded] %></ser:TaxIncluded>
+             <ser:BusinessIdentificationNo><%= lin[:businessidentificationno] %></ser:BusinessIdentificationNo>
+           </ser:Line><% end %>  
+          </ser:Lines>
+          <ser:DetailLevel><%= @detaillevel %></ser:DetailLevel>
+          <ser:ReferenceCode><%= @referencecode %></ser:ReferenceCode>
+          <ser:HashCode><%= @hashcode %></ser:HashCode>
+          <ser:LocationCode><%= @locationcode %></ser:LocationCode>
+          <ser:Commit><%= @commit %></ser:Commit>
+          <ser:BatchCode><%= @batchcode %></ser:BatchCode>
+          <ser:TaxOverride>
+            <ser:TaxOverrideType><%= @taxoverridetype %></ser:TaxOverrideType>
+            <ser:TaxAmount><%= @taxamount %></ser:TaxAmount>
+            <ser:TaxDate><%= @taxdate %></ser:TaxDate>
+            <ser:Reason><%= @reason %></ser:Reason>
+          </ser:TaxOverride>
+          <ser:CurrencyCode><%= @currencycode %></ser:CurrencyCode>
+          <ser:ServiceMode><%= @servicemode %></ser:ServiceMode>
+          <ser:PaymentDate><%= @paymentdate %></ser:PaymentDate>
+          <ser:ExchangeRate><%= @exchangerate %></ser:ExchangeRate>
+          <ser:ExchangeRateEffDate><%= @exchangerateeffdate %></ser:ExchangeRateEffDate>
+          <ser:PosLaneCode><%= @poslanecode %></ser:PosLaneCode>
+          <ser:BusinessIdentificationNo><%= @businessidentificationno %></ser:BusinessIdentificationNo>
+        </ser:GetTaxRequest>
+      </ser:GetTax>
+   </soapenv:Body>
+</soapenv:Envelope>
