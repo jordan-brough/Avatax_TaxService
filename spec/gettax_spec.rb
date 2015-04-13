@@ -179,7 +179,7 @@ describe "GetTax" do
     it "all parameters succeed" do
       @service = AvaTax::TaxService.new(@creds)
       @result = @service.gettax(@request_required.merge(@request_optional))
-      @result.should eql "Success" 
+      @result[:result_code].should eql "Success"
     end
   end
   describe "workflow" do
