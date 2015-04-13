@@ -150,6 +150,28 @@ describe "GetTax" do
       @result[:messages][:message].should be_a Array
       @result[:messages][:message][0].should include(:details => "The user or account could not be authenticated.")
     end
+    it "failures with a single message" do
+      @service = AvaTax::TaxService.new(@creds)
+      @request_required[:lines] = [] # single error
+      @result = @service.gettax(@request_required)
+      @result[:result_code].should eql "Error"
+      @result[:messages][:message].should be_a Array
+      @result[:messages][:message][0].should include(:summary => "Lines is expected to be between 1 and 1000.")
+    end
+    it "failures with multiple messages" do
+      @service = AvaTax::TaxService.new(@creds)
+      @request_required[:lines] = [] # first error
+      @request_required[:addresses] = [] # second error
+      @result = @service.gettax(@request_required)
+      @result[:result_code].should eql "Error"
+      @result[:messages][:message].should be_a Array
+      @result[:messages][:message].map { |m| m[:summary] }.should match_array(
+        [
+          "Lines is expected to be between 1 and 1000.",
+          "At least one address or LocationCode is required. Address is incomplete or invalid.",
+        ],
+      )
+    end
     it "successful results" do
       @service = AvaTax::TaxService.new(@creds)
       @result = @service.gettax(@request_required)
@@ -158,7 +180,7 @@ describe "GetTax" do
       end
       @result[:result_code].should eql "Success" and @result[:transaction_id].should_not be_nil
     end
-  end  
+  end
   describe "requests with" do
     it "missing required parameters fail" do
       @service = AvaTax::TaxService.new(@creds)
@@ -196,7 +218,7 @@ describe "GetTax" do
       @history_result = @svc.gettaxhistory(@history_request)
       @result[:result_code].should eql "Success" and 
       @history_result[:result_code].should eql "Error" and
-      @history_result[:messages][:message][:summary].should eql "The tax document could not be found."
+      @history_result[:messages][:message][0][:summary].should eql "The tax document could not be found."
     end
     it "should record a document as uncommitted" do
       @request = @request_required
