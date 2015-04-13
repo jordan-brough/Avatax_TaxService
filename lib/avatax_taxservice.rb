@@ -633,23 +633,15 @@ module AvaTax
     #standardizes error message format to an array of messages - nokogiri will collapse a single element array into the response hash.
     ############################################################################################################
     def messages_to_array(response)
-      if not response[:messages].nil? 
-        return response
+      if response[:messages]
+        if response[:messages][:message].is_a?(Hash)
+          response[:messages][:message] = [response[:messages][:message]]
+        end
+      else
+        response[:messages] = []
       end
-      # add the messages array to the response - if we got here, there was only one error.
-      response[:messages] = [{
-        :summary => response[:summary],
-        :details => response[:details],
-        :helplink => response[:helplink],
-        :refersto => response[:refersto],
-        :severity => response[:severity],
-        :source => response[:source]
-        }]
-      #remove all the error information from the hash  
-      response[:messages][0].each do |k,v|
-        response.delete(k)
-      end  
-      return response
+
+      response
     end
   end
 end
