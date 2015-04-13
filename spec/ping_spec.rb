@@ -46,9 +46,9 @@ describe "Ping" do
       @creds[:password] = nil
       @service = AvaTax::TaxService.new(@creds)
       @result = @service.ping
-      @result[:result_code].should eql "Error" and       
-      @result[:messages].kind_of?(Array).should eql true and
-      @result[:messages][0].should include(:details => "The user or account could not be authenticated.")
+      @result[:result_code].should eql "Error"
+      @result[:messages][:message].should be_a Array
+      @result[:messages][:message][0].should include(:details => "The user or account could not be authenticated.")
     end
     it "successful results" do
       @service = AvaTax::TaxService.new(@creds)

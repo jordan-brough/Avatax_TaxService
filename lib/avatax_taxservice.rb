@@ -610,7 +610,7 @@ module AvaTax
     end
 
     private
-  
+
     ############################################################################################################
     # abend - Unexpected error handling
     ############################################################################################################
@@ -619,9 +619,15 @@ module AvaTax
       @log.puts "#{Time.now}: Error calling #{@service} service ... check that your account name and password are correct."
       @response = error.to_hash
       @response[:result_code] = 'Error'
-      @response[:summary] = @response[:fault][:faultcode]
-      @response[:details] = @response[:fault][:faultstring]   
-      return messages_to_array(@response)
+      @response[:messages] = {
+        :message => [
+          {
+            :summary => @response[:fault][:faultcode],
+            :details => @response[:fault][:faultstring],
+          },
+        ],
+      }
+      @response
     end
     ############################################################################################################
     #standardizes error message format to an array of messages - nokogiri will collapse a single element array into the response hash.
@@ -646,4 +652,4 @@ module AvaTax
       return response
     end
   end
-end  
+end
